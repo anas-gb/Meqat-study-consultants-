@@ -1,124 +1,65 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pathways Global Education Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exact Form Replica</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
-  <div class="max-w-4xl mx-auto p-8 bg-white shadow-lg mt-10 rounded-lg">
-    <h1 class="text-2xl font-bold mb-4 text-center">Pathways Global Education Form</h1>
-    <form id="eduForm" class="space-y-6">
-      <!-- PERSONAL INFORMATION -->
-      <div>
-        <h2 class="text-xl font-semibold mb-2">Personal Information</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <input type="text" name="applicantName" placeholder="Applicant Name" class="input">
-          <input type="text" name="fatherName" placeholder="Father Name" class="input">
-          <input type="email" name="email" placeholder="Email" class="input">
-          <input type="text" name="address" placeholder="Address" class="input">
-          <input type="text" name="whatsapp" placeholder="WhatsApp No." class="input">
-          <input type="text" name="contact" placeholder="Contact No." class="input">
-          <input type="date" name="dob" class="input">
-          <input type="text" name="maritalStatus" placeholder="Marital Status" class="input">
-        </div>
-      </div><!-- EDUCATION INFO -->
-  <div>
-    <h2 class="text-xl font-semibold mb-2">Educational Information</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <input type="text" name="qualification" placeholder="Recent Qualification" class="input">
-      <input type="text" name="yearsAward" placeholder="Years Award" class="input">
-      <input type="text" name="grade" placeholder="Grade / CGPA" class="input">
-      <input type="text" name="university" placeholder="Board / University" class="input">
-      <input type="text" name="ielts" placeholder="IELTS Status" class="input">
-      <input type="text" name="englishMarks" placeholder="English Marks %" class="input">
-    </div>
-  </div>
-
-  <!-- WORK EXPERIENCE -->
-  <div>
-    <h2 class="text-xl font-semibold mb-2">Work/Business Experience</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <input type="text" name="designation" placeholder="Designation" class="input">
-      <input type="text" name="duration" placeholder="Duration" class="input">
-      <input type="text" name="organization" placeholder="Organization" class="input">
-      <input type="text" name="jobDescription" placeholder="Job Description" class="input">
-      <input type="text" name="field" placeholder="Field of Job" class="input">
-      <input type="text" name="jobRelevant" placeholder="Job relevant to study?" class="input">
-    </div>
-  </div>
-
-  <!-- VISA INFO -->
-  <div>
-    <h2 class="text-xl font-semibold mb-2">Visa Information</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <input type="text" name="country1" placeholder="1st Country Choice" class="input">
-      <input type="text" name="country2" placeholder="2nd Country Choice" class="input">
-      <input type="text" name="universityChoice" placeholder="University Choice" class="input">
-      <input type="text" name="program" placeholder="Program You Want to Study" class="input">
-      <input type="text" name="passportStatus" placeholder="Passport Status" class="input">
-      <input type="text" name="relatives" placeholder="Relatives in Desired Country" class="input">
-    </div>
-  </div>
-
-  <!-- PREVIOUS VISA -->
-  <div>
-    <h2 class="text-xl font-semibold mb-2">Previous Visa History</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <input type="text" name="visaApplied" placeholder="Visa Applied (Yes/No)" class="input">
-      <input type="text" name="whereApplied" placeholder="Where Applied?" class="input">
-      <input type="text" name="decision" placeholder="Decision (Approved/Rejected)" class="input">
-      <input type="text" name="reason" placeholder="Reason if Rejected" class="input">
-      <input type="text" name="countryVisa" placeholder="Country Visa/University" class="input">
-    </div>
-  </div>
-
-  <!-- FRIENDS INFO -->
-  <div>
-    <h2 class="text-xl font-semibold mb-2">Friends Studying Abroad</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <input type="text" name="friend1" placeholder="Friend Name" class="input">
-      <input type="text" name="friend1whatsapp" placeholder="WhatsApp No." class="input">
-      <input type="text" name="friend2" placeholder="Friend Name" class="input">
-      <input type="text" name="friend2whatsapp" placeholder="WhatsApp No." class="input">
-      <input type="text" name="friend3" placeholder="Friend Name" class="input">
-      <input type="text" name="friend3whatsapp" placeholder="WhatsApp No." class="input">
-      <input type="text" name="friend4" placeholder="Friend Name" class="input">
-      <input type="text" name="friend4whatsapp" placeholder="WhatsApp No." class="input">
-    </div>
-  </div>
-
-  <button type="button" onclick="generatePDF()" class="mt-6 w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700">Download PDF</button>
-</form>
-
-  </div>  <script>
-    async function generatePDF() {
-      const form = document.getElementById('eduForm');
-      const data = new FormData(form);
-      const pdf = new jspdf.jsPDF();
-      let y = 10;
-      pdf.setFontSize(12);
-      pdf.text("Pathways Global Education - Student Form", 10, y);
-      y += 10;
-
-      for (let [key, value] of data.entries()) {
-        pdf.text(`${key.replace(/([A-Z])/g, ' $1')}: ${value}`, 10, y);
-        y += 8;
-        if (y > 280) {
-          pdf.addPage();
-          y = 10;
-        }
-      }
-
-      pdf.save("Pathways_Form.pdf");
+  <style>
+    * {
+      font-family: Arial, sans-serif;
     }
-  </script>  <style>
-    .input {
-      padding: 0.5rem;
+    .form-layout {
+      width: 850px;
+      height: auto;
+      background: white;
       border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      width: 100%;
+      padding: 20px;
+      margin: 20px auto;
+      position: relative;
     }
-  </style></body>
+    .form-field {
+      position: absolute;
+      border: none;
+      border-bottom: 1px solid #000;
+      background: transparent;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 py-6">
+  <div class="form-layout" id="formContent">
+    <h1 class="text-xl font-bold text-center mb-4">PATHWAYS GLOBAL EDUCATION FORM</h1>
+    <p class="text-sm text-gray-600 text-center">(Fill all the fields below)</p><!-- Example field positions (more to be added according to the image) -->
+<input class="form-field" style="top: 60px; left: 50px; width: 300px;" placeholder="Applicant Name" />
+<input class="form-field" style="top: 60px; left: 400px; width: 300px;" placeholder="Father Name" />
+<input class="form-field" style="top: 100px; left: 50px; width: 300px;" placeholder="Email" />
+<input class="form-field" style="top: 100px; left: 400px; width: 300px;" placeholder="WhatsApp No." />
+
+<!-- Add more fields here matching exact layout from the image -->
+
+<input class="form-field" style="top: 140px; left: 50px; width: 650px;" placeholder="Address" />
+<input class="form-field" style="top: 180px; left: 50px; width: 300px;" placeholder="Date of Birth" />
+<input class="form-field" style="top: 180px; left: 400px; width: 300px;" placeholder="Marital Status" />
+
+<!-- Signature / Date -->
+<input class="form-field" style="top: 700px; left: 50px; width: 300px;" placeholder="Date" />
+<input class="form-field" style="top: 700px; left: 400px; width: 300px;" placeholder="Applicant Signature" />
+
+  </div>  <div class="flex justify-center mt-6">
+    <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Download as PDF</button>
+  </div>  <script>
+    async function downloadPDF() {
+      const element = document.getElementById("formContent");
+      const canvas = await html2canvas(element);
+      const imageData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF("p", "pt", "a4");
+      const imgProps = pdf.getImageProperties(imageData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("PathwaysForm.pdf");
+    }
+  </script></body>
 </html>
