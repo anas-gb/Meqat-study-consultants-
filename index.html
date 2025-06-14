@@ -1,65 +1,548 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exact Form Replica</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    * {
-      font-family: Arial, sans-serif;
-    }
-    .form-layout {
-      width: 850px;
-      height: auto;
-      background: white;
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin: 20px auto;
-      position: relative;
-    }
-    .form-field {
-      position: absolute;
-      border: none;
-      border-bottom: 1px solid #000;
-      background: transparent;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meqat Study Consultants - Student Application Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <style>
+        .form-section {
+            border: 2px solid #374151;
+            margin-bottom: 1rem;
+        }
+        .section-header {
+            background-color: #374151;
+            color: white;
+            padding: 0.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-field {
+            border-bottom: 1px solid #d1d5db;
+            padding: 0.25rem 0.5rem;
+            min-height: 2rem;
+        }
+        .field-label {
+            font-weight: 600;
+            color: #374151;
+            margin-right: 0.5rem;
+            min-width: 120px;
+            display: inline-block;
+        }
+        input[type="text"], input[type="email"], input[type="date"], input[type="tel"], textarea, select {
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .checkbox-field {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        @media print {
+            body { font-size: 12px; }
+            .no-print { display: none !important; }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 py-6">
-  <div class="form-layout" id="formContent">
-    <h1 class="text-xl font-bold text-center mb-4">PATHWAYS GLOBAL EDUCATION FORM</h1>
-    <p class="text-sm text-gray-600 text-center">(Fill all the fields below)</p><!-- Example field positions (more to be added according to the image) -->
-<input class="form-field" style="top: 60px; left: 50px; width: 300px;" placeholder="Applicant Name" />
-<input class="form-field" style="top: 60px; left: 400px; width: 300px;" placeholder="Father Name" />
-<input class="form-field" style="top: 100px; left: 50px; width: 300px;" placeholder="Email" />
-<input class="form-field" style="top: 100px; left: 400px; width: 300px;" placeholder="WhatsApp No." />
+<body class="bg-gray-50 font-sans">
+    <div class="max-w-4xl mx-auto p-4 bg-white shadow-lg">
+        <!-- Header -->
+        <div class="text-center mb-6 border-b-4 border-blue-600 pb-4">
+            <h1 class="text-3xl font-bold text-blue-600 mb-2">
+                <i class="fas fa-graduation-cap mr-2"></i>
+                Meqat Study Consultants
+            </h1>
+            <p class="text-gray-600 text-lg">Explore your future pathway through Meqat Study Consultants</p>
+            <div class="mt-4 text-sm text-gray-500 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div><i class="fas fa-map-marker-alt mr-1"></i> CANADA: 170 Sherwood Mount NW Calgary, Canada</div>
+                <div><i class="fas fa-map-marker-alt mr-1"></i> UNITED KINGDOM: 321, Fairthorn Road, Nottingham, UK</div>
+                <div><i class="fas fa-map-marker-alt mr-1"></i> SAUDI ARABIA: Office No. 105, Upper Ground Floor Re City Oasis</div>
+                <div><i class="fas fa-map-marker-alt mr-1"></i> PAKISTAN: Office No. 12-13 Mezzanine Plot #7, Block 70</div>
+            </div>
+        </div>
 
-<!-- Add more fields here matching exact layout from the image -->
+        <!-- PDF Download Controls -->
+        <div class="no-print bg-blue-50 p-4 rounded-lg mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="flex items-center gap-4">
+                <label for="pdfFileName" class="font-semibold text-gray-700">PDF File Name:</label>
+                <input type="text" id="pdfFileName" value="Student_Application_Form" 
+                       class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button onclick="downloadPDF()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg flex items-center gap-2 transition-colors">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </button>
+        </div>
 
-<input class="form-field" style="top: 140px; left: 50px; width: 650px;" placeholder="Address" />
-<input class="form-field" style="top: 180px; left: 50px; width: 300px;" placeholder="Date of Birth" />
-<input class="form-field" style="top: 180px; left: 400px; width: 300px;" placeholder="Marital Status" />
+        <form id="applicationForm">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-user mr-2"></i>PERSONAL INFORMATION
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Applicant Name:</span>
+                            <input type="text" id="applicantName" name="applicantName" placeholder="Enter full name">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Date of Birth:</span>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Father's Name:</span>
+                            <input type="text" id="fatherName" name="fatherName" placeholder="Enter father's name">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Marital Status:</span>
+                            <select id="maritalStatus" name="maritalStatus">
+                                <option value="">Select Status</option>
+                                <option value="Single">Single</option>
+                                <option value="Married">Married</option>
+                                <option value="Divorced">Divorced</option>
+                                <option value="Widowed">Widowed</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Mobile No.:</span>
+                            <input type="tel" id="mobileNo" name="mobileNo" placeholder="Enter mobile number">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Email:</span>
+                            <input type="email" id="email" name="email" placeholder="Enter email address">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">WhatsApp No.:</span>
+                            <input type="tel" id="whatsappNo" name="whatsappNo" placeholder="Enter WhatsApp number">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<!-- Signature / Date -->
-<input class="form-field" style="top: 700px; left: 50px; width: 300px;" placeholder="Date" />
-<input class="form-field" style="top: 700px; left: 400px; width: 300px;" placeholder="Applicant Signature" />
+            <!-- Educational Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-graduation-cap mr-2"></i>EDUCATIONAL INFORMATION
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Recent Qualification:</span>
+                            <input type="text" id="recentQualification" name="recentQualification" placeholder="Enter qualification">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Year Awarded:</span>
+                            <input type="text" id="yearAwarded" name="yearAwarded" placeholder="Enter year">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Grade/GPA:</span>
+                            <input type="text" id="gradeGPA" name="gradeGPA" placeholder="Enter grade or GPA">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Board/University:</span>
+                            <input type="text" id="boardUniversity" name="boardUniversity" placeholder="Enter board/university">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">IELTS Status:</span>
+                            <select id="ieltsStatus" name="ieltsStatus">
+                                <option value="">Select Status</option>
+                                <option value="Taken">Taken</option>
+                                <option value="Planning to Take">Planning to Take</option>
+                                <option value="Not Required">Not Required</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Subject:</span>
+                            <input type="text" id="subject" name="subject" placeholder="Enter subject/field">
+                        </div>
+                        <div class="form-field col-span-full">
+                            <span class="field-label">Institute:</span>
+                            <input type="text" id="institute" name="institute" placeholder="Enter institute name">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  </div>  <div class="flex justify-center mt-6">
-    <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Download as PDF</button>
-  </div>  <script>
-    async function downloadPDF() {
-      const element = document.getElementById("formContent");
-      const canvas = await html2canvas(element);
-      const imageData = canvas.toDataURL("image/png");
-      const pdf = new jspdf.jsPDF("p", "pt", "a4");
-      const imgProps = pdf.getImageProperties(imageData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("PathwaysForm.pdf");
-    }
-  </script></body>
+            <!-- Work Experience Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-briefcase mr-2"></i>WORK EXPERIENCES OR BUSINESS DETAILS/INFORMATION
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Company Name:</span>
+                            <input type="text" id="companyName" name="companyName" placeholder="Enter company name">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Designation:</span>
+                            <input type="text" id="designation" name="designation" placeholder="Enter designation">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Experience:</span>
+                            <input type="text" id="experience" name="experience" placeholder="Enter experience duration">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visa Processing Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-passport mr-2"></i>INFORMATION REQUIRED FOR STUDENT VISA PROCESSING
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Last Country Visited for Study:</span>
+                            <input type="text" id="lastCountryVisited" name="lastCountryVisited" placeholder="Enter country">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Country of Choice:</span>
+                            <input type="text" id="countryOfChoice" name="countryOfChoice" placeholder="Enter preferred country">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">University Choice:</span>
+                            <input type="text" id="universityChoice" name="universityChoice" placeholder="Enter university preference">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Program/Course:</span>
+                            <input type="text" id="programCourse" name="programCourse" placeholder="Enter program details">
+                        </div>
+                        <div class="form-field col-span-full">
+                            <span class="field-label">Why you decided to study abroad:</span>
+                            <textarea id="whyStudyAbroad" name="whyStudyAbroad" placeholder="Explain your motivation for studying abroad"></textarea>
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Passport:</span>
+                            <div class="checkbox-field">
+                                <input type="checkbox" id="passportAvailable" name="passportAvailable">
+                                <label for="passportAvailable">Available</label>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Any Relative in Desired Country:</span>
+                            <div class="checkbox-field">
+                                <input type="checkbox" id="relativeInCountry" name="relativeInCountry">
+                                <label for="relativeInCountry">Yes</label>
+                            </div>
+                        </div>
+                        <div class="form-field col-span-full">
+                            <span class="field-label">Visa History or Abroad University Application Status:</span>
+                            <textarea id="visaHistory" name="visaHistory" placeholder="Describe your visa history or application status"></textarea>
+                        </div>
+                        <div class="form-field col-span-full">
+                            <span class="field-label">Intention to return after studies:</span>
+                            <textarea id="intentionReturn" name="intentionReturn" placeholder="Describe your intention to return to home country"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friends Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-users mr-2"></i>MENTION YOUR FRIENDS WHO IS STUDYING ABROAD OR HAVE A PLAN TO STUDY WITH YOU
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Friend 1 Name:</span>
+                            <input type="text" id="friend1Name" name="friend1Name" placeholder="Enter friend's name">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Friend 1 WhatsApp:</span>
+                            <input type="tel" id="friend1WhatsApp" name="friend1WhatsApp" placeholder="Enter WhatsApp number">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Friend 1 Country:</span>
+                            <input type="text" id="friend1Country" name="friend1Country" placeholder="Enter country">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Friend 2 Name:</span>
+                            <input type="text" id="friend2Name" name="friend2Name" placeholder="Enter friend's name">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Friend 2 WhatsApp:</span>
+                            <input type="tel" id="friend2WhatsApp" name="friend2WhatsApp" placeholder="Enter WhatsApp number">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Friend 2 Country:</span>
+                            <input type="text" id="friend2Country" name="friend2Country" placeholder="Enter country">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-signature mr-2"></i>SIGNATURE
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <span class="field-label">Date:</span>
+                            <input type="date" id="signatureDate" name="signatureDate">
+                        </div>
+                        <div class="form-field">
+                            <span class="field-label">Applicant Signature:</span>
+                            <input type="text" id="applicantSignature" name="applicantSignature" placeholder="Type your name as signature">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 pt-4 border-t-2 border-blue-600">
+            <p class="text-blue-600 font-semibold">
+                Meqat Study Consultants - Explore your future pathway through Meqat Study Consultants
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Set current date as default for signature date
+        document.getElementById('signatureDate').valueAsDate = new Date();
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Get custom filename
+            const fileName = document.getElementById('pdfFileName').value.trim() || 'Student_Application_Form';
+            
+            // PDF configuration
+            const pageWidth = 210; // A4 width in mm
+            const pageHeight = 297; // A4 height in mm
+            const margin = 15;
+            const contentWidth = pageWidth - (margin * 2);
+            let y = margin;
+            
+            // Helper function to add text with word wrap
+            function addText(text, x, yPos, maxWidth, fontSize = 10, isBold = false) {
+                doc.setFontSize(fontSize);
+                doc.setFont("helvetica", isBold ? "bold" : "normal");
+                const lines = doc.splitTextToSize(text, maxWidth);
+                doc.text(lines, x, yPos);
+                return yPos + (lines.length * (fontSize * 0.35));
+            }
+            
+            // Helper function to add section header
+            function addSectionHeader(title, yPos) {
+                doc.setFillColor(55, 65, 81);
+                doc.rect(margin, yPos - 5, contentWidth, 8, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(title, margin + 2, yPos);
+                doc.setTextColor(0, 0, 0);
+                return yPos + 12;
+            }
+            
+            // Header
+            doc.setFontSize(18);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(37, 99, 235);
+            y = addText("MEQAT STUDY CONSULTANTS", margin, y, contentWidth, 18, true);
+            
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            y = addText("Explore your future pathway through Meqat Study Consultants", margin, y + 2, contentWidth, 12);
+            
+            y += 8;
+            
+            // Contact Information
+            const contacts = [
+                "CANADA: 170 Sherwood Mount NW Calgary, Canada",
+                "UNITED KINGDOM: 321, Fairthorn Road, Nottingham, UK",
+                "SAUDI ARABIA: Office No. 105, Upper Ground Floor Re City Oasis",
+                "PAKISTAN: Office No. 12-13 Mezzanine Plot #7, Block 70"
+            ];
+            
+            contacts.forEach(contact => {
+                y = addText(contact, margin, y, contentWidth, 8);
+            });
+            
+            y += 10;
+            
+// Personal Information Section
+            y = addSectionHeader("PERSONAL INFORMATION", y);
+            
+            const personalFields = [
+                ['Applicant Name', document.getElementById('applicantName').value],
+                ['Date of Birth', document.getElementById('dateOfBirth').value],
+                ['Father\'s Name', document.getElementById('fatherName').value],
+                ['Marital Status', document.getElementById('maritalStatus').value],
+                ['Mobile No.', document.getElementById('mobileNo').value],
+  ['Email', document.getElementById('email').value],
+                ['WhatsApp No.', document.getElementById('whatsappNo').value]
+            ];
+            
+            personalFields.forEach(([label, value]) => {
+                y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                y += 2;
+            });
+          
+y += 5;                
+
+
+   // Educational Information Section
+            y = addSectionHeader("EDUCATIONAL INFORMATION", y);
+            
+            const educationalFields = [
+                ['Recent Qualification', document.getElementById('recentQualification').value],
+                ['Year Awarded', document.getElementById('yearAwarded').value],
+                ['Grade/GPA', document.getElementById('gradeGPA').value],
+['Board/University', document.getElementById('boardUniversity').value],
+                ['IELTS Status', document.getElementById('ieltsStatus').value],
+                ['Subject', document.getElementById('subject').value],
+                ['Institute', document.getElementById('institute').value]
+            ];
+educationalFields.forEach(([label, value]) => {
+                y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                y += 2;
+            });
+            
+            y += 5;
+
+
+            // Work Experience Section
+            y = addSectionHeader("WORK EXPERIENCES OR BUSINESS DETAILS", y);
+            
+            const workFields = [
+                ['Company Name', document.getElementById('companyName').value],
+                ['Designation', document.getElementById('designation').value],
+
+                ['Experience', document.getElementById('experience').value]
+            ];
+            
+            workFields.forEach(([label, value]) => {
+                y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                y += 2;
+            });
+            
+            y += 5;
+            
+            // Check if we need a new page
+            if (y > pageHeight - 60) {
+                doc.addPage();
+                y = margin;
+            }
+
+            // Visa Processing Section
+            y = addSectionHeader("INFORMATION REQUIRED FOR STUDENT VISA PROCESSING", y);
+            
+            const visaFields = [
+                ['Last Country Visited for Study', document.getElementById('lastCountryVisited').value],
+                ['Country of Choice', document.getElementById('countryOfChoice').value],
+
+                ['University Choice', document.getElementById('universityChoice').value],
+                ['Program/Course', document.getElementById('programCourse').value],
+                ['Why you decided to study abroad', document.getElementById('whyStudyAbroad').value],
+                ['Passport Available', document.getElementById('passportAvailable').checked ? 'Yes' : 'No'],
+                ['Any Relative in Desired Country', document.getElementById('relativeInCountry').checked ? 'Yes' : 'No'],
+                ['Visa History', document.getElementById('visaHistory').value],
+                ['Intention to Return', document.getElementById('intentionReturn').value]
+            ];
+
+visaFields.forEach(([label, value]) => {
+                if (label === 'Why you decided to study abroad' || label === 'Visa History' || label === 'Intention to Return') {
+                    y = addText(`${label}:`, margin, y, contentWidth, 10, true);
+                    y = addText(value || '_'.repeat(50), margin, y, contentWidth);
+                } else {
+                    y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                }
+                y += 2;
+            });
+            
+            y += 5;
+
+    // Friends Information Section
+            y = addSectionHeader("FRIENDS STUDYING ABROAD OR PLANNING TO STUDY", y);
+            
+            const friendsFields = [
+                ['Friend 1 Name', document.getElementById('friend1Name').value],
+                ['Friend 1 WhatsApp', document.getElementById('friend1WhatsApp').value],             
+  ['Friend 1 Country', document.getElementById('friend1Country').value],
+                ['Friend 2 Name', document.getElementById('friend2Name').value],
+                ['Friend 2 WhatsApp', document.getElementById('friend2WhatsApp').value],
+                ['Friend 2 Country', document.getElementById('friend2Country').value]
+            ];
+            
+            friendsFields.forEach(([label, value]) => {
+                y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                y += 2;
+            });
+            
+            y += 10;         
+
+// Signature Section
+            y = addSectionHeader("SIGNATURE", y);
+            
+            const signatureFields = [
+                ['Date', document.getElementById('signatureDate').value],
+                ['Applicant Signature', document.getElementById('applicantSignature').value]
+            ];
+            
+            signatureFields.forEach(([label, value]) => {
+                y = addText(`${label}: ${value || '_'.repeat(30)}`, margin, y, contentWidth);
+                y += 5;
+            });
+
+
+// Footer
+            y += 10;
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(37, 99, 235);
+            doc.text("Meqat Study Consultants - Explore your future pathway through Meqat Study Consultants", 
+                    pageWidth / 2, y, { align: 'center' });
+
+
+// Save the PDF
+            doc.save(`${fileName}.pdf`);
+        }
+        
+        // Auto-save form data to localStorage
+        const form = document.getElementById('applicationForm');
+        const inputs = form.querySelectorAll('input, select, textarea');
+
+// Load saved data
+        inputs.forEach(input => {
+            const savedValue = localStorage.getItem(`form_${input.id}`);
+            if (savedValue) {
+                if (input.type === 'checkbox') {
+                    input.checked = savedValue === 'true';
+                } else {
+                    input.value = savedValue;
+                }
+            }
+        });
+        
+
+// Save data on change
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.type === 'checkbox') {
+                    localStorage.setItem(`form_${input.id}`, input.checked);
+                } else {
+                    localStorage.setItem(`form_${input.id}`, input.value);
+                }
+            });
+        });
+    </script>
+</body>
 </html>
